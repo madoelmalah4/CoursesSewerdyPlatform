@@ -22,6 +22,8 @@ import { Email, Phone } from "@mui/icons-material";
 import Footer from "../Components/Footer";
 
 import AcheivmentsSlider from "../Components/AcheivmentsSlider";
+
+
 function About() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));

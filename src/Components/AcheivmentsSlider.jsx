@@ -6,7 +6,6 @@ import "swiper/css/pagination";
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import BasilPic from "../assets/basil.png";
 import Nada2 from "../assets/Nada2.png";
-import hager from '../assets/hager.jpg'
 const achievements = [
   {
     id: 1,

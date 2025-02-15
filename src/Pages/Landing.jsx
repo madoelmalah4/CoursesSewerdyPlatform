@@ -16,8 +16,6 @@ import { Reveal } from "../Components/Reveal";
 import LandPic from "../assets/landpic.png";
 import Redfram from "../assets/fram2.png";
 import HoverCounter from "../Components/HoverCounter";
-import Nada2 from "../assets/Nada2.png";
-import BasilPic from "../assets/basil.png";
 import { useInView } from "react-intersection-observer";
 import SliderPartners from "../Components/Slider";
 import Footer from "../Components/Footer";
