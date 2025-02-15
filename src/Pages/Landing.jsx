@@ -27,6 +27,7 @@ import SewedyVidoe from "../assets/sewedyVidoe.mp4";
 import homep from "../assets/homep.png";
 import sp1 from "../assets/sp1.jpg";
 import sp2 from "../assets/sp2.jpg";
+
 const Landing = () => {
   const { inView, ref } = useInView();
   const navigate = useNavigate();
