@@ -223,6 +223,7 @@ const Landing = () => {
       >
         <Box
           component={"img"}
+          loading="lazy"
           src={homep}
           sx={{
             width: "250px",
