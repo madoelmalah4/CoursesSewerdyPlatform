@@ -22,11 +22,14 @@ import { Email, Phone } from "@mui/icons-material";
 import Footer from "../Components/Footer";
 
 import AcheivmentsSlider from "../Components/AcheivmentsSlider";
+import { useInView } from "framer-motion";
 
 
 function About() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+
 
   return (
     <div>
@@ -368,8 +371,7 @@ function About() {
           </Typography>
         </Stack>
       </Grid2>
-
-      <AcheivmentsSlider/>
+        <AcheivmentsSlider  />
 
       <Box sx={{ px: { xs: 2, md: 10 }, py: 5, mt: 10 }}>
         {/* Title */}
@@ -512,7 +514,7 @@ function About() {
       <div
         style={{
           display: "flex",
-          marginTop:"100px"
+          marginTop: "100px",
         }}
       >
         <Footer />
