@@ -44,7 +44,7 @@ export const theme = createTheme({
         },
         primary: {
             dark: colors.green[700],
-            main: colors.green[500],
+            main: "#DA1B1B",
             light: colors.green[300],
             200: colors.green[200],
             contrastText: "#fff",
@@ -77,7 +77,7 @@ export const theme = createTheme({
         },
     },
     typography: {
-        fontFamily: ["Rubik"].join(","),
+        fontFamily: ["Inter"].join(","),
         h1: {
             fontSize: 49,
             fontWeight: "bold",

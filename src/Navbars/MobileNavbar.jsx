@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Box,
   IconButton,
@@ -5,19 +6,20 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Drawer,
+  Button,
+  Fade,
 } from "@mui/material";
-import React, { useState } from "react";
-import MenuIcon from "@mui/icons-material/Menu";
-import SewedyLogo from "../assets/sewedy2.png"; // Ensure this is a high-quality image
+import { Menu, Close, ChevronRight } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import SewedyLogo from "../assets/sewedy2.png";
 
 const MobileNavbar = () => {
-  const [isClicked, setIsClicked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Check if screen size is below 'md' (mobile)
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const navigate = useNavigate();
 
-  // Navigation items
   const navItems = [
     { text: "Home", path: "/" },
     { text: "Our Courses", path: "/courses" },
@@ -25,122 +27,214 @@ const MobileNavbar = () => {
     { text: "Work", path: "/Work" },
   ];
 
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsOpen(false);
+  };
+
   return (
     <>
       {/* Main Navbar */}
       <Stack
         sx={{
-          width: "100vw",
-          height: "60px",
+          width: "100%",
+          height: "70px",
           flexDirection: "row",
           alignItems: "center",
+          justifyContent: "space-between",
           position: "fixed",
           backgroundColor: "white",
-          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 2px 10px rgba(0, 0, 0, 0.06)",
           padding: "0 16px",
-          zIndex: 1000,
+          zIndex: theme.zIndex.appBar,
         }}
       >
-        {/* Menu Icon (Visible only on mobile) */}
-        {isMobile && (
-          <IconButton
-            onClick={() => setIsClicked(!isClicked)}
-            sx={{
-              padding: "8px",
-              position: "absolute",
-              left: "10px",
-              "&:hover": {
-                backgroundColor: "rgba(0, 0, 0, 0.04)",
-              },
-            }}
-          >
-            <MenuIcon sx={{ fontSize: "32px", color: "black" }} />
-          </IconButton>
-        )}
+        {/* Menu Button */}
+        <IconButton
+          onClick={() => setIsOpen(true)}
+          sx={{
+            width: 40,
+            height: 40,
+            "&:hover": {
+              backgroundColor: "rgba(239, 49, 49, 0.04)",
+            },
+          }}
+        >
+          <Menu sx={{ fontSize: 28, color: "#EF3131" }} />
+        </IconButton>
 
-        {/* Logo (Always Centered) */}
+        {/* Centered Logo */}
         <Box
           component="img"
           src={SewedyLogo}
+          alt="Sewedy Logo"
+          sx={{
+            height: "40px",
+            width: "auto",
+            position: "absolute",
+            left:"45%",
+            transform: "translateX(-50%)",
+            cursor: "pointer",
+            mb:1,
+          }}
+          onClick={() => navigate("/")}
+        />
+
+        {/* Login Button */}
+        <Button
+          variant="contained"
+          onClick={() => navigate("/login")}
+          sx={{
+            bgcolor: "#EF3131",
+            color: "white",
+            px: 2,
+            minWidth: "unset",
+            height: 36,
+            fontSize: "0.875rem",
+            textTransform: "none",
+            mr:4,
+            "&:hover": {
+              bgcolor: "#D32F2F",
+            },
+          }}
+        >
+          Login
+        </Button>
+      </Stack>
+
+      {/* Mobile Navigation Drawer */}
+      <Drawer
+        anchor="left"
+        open={isOpen}
+        onClose={() => setIsOpen(false)}
+        PaperProps={{
+          sx: {
+            width: "280px",
+            background: "white",
+            pt: 2,
+          },
+        }}
+      >
+        {/* Close Button */}
+        <IconButton
+          onClick={() => setIsOpen(false)}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: "#EF3131",
+          }}
+        >
+          <Close />
+        </IconButton>
+
+        {/* Logo in Drawer */}
+        <Box
+          component="img"
+          src={SewedyLogo}
+          alt="Sewedy Logo"
           sx={{
             width: "140px",
             height: "auto",
-            position: "absolute",
-            left: "50%",
-            transform: "translateX(-50%)", // Centers the logo
-            cursor: "pointer",
-            zIndex: 1001,
-            mb:2
-          }}
-          onClick={() => {
-            navigate("/");
+            mx: "auto",
+            mt: 2,
+            mb: 4,
           }}
         />
-      </Stack>
 
-      {/* Side Navbar (Visible only on mobile) */}
-      {isMobile && (
-        <Box
-          sx={{
-            width: "250px",
-            height: "100vh",
-            position: "fixed",
-            top: 0,
-            left: isClicked ? 0 : "-250px",
-            backgroundColor: "white",
-            boxShadow: "2px 0px 4px rgba(0, 0, 0, 0.1)",
-            transition: "left 0.3s ease-in-out",
-            zIndex: 999,
-            pt: 8,
-          }}
-        >
-          <Stack
-            sx={{
-              justifyContent: "center",
-              gap: 2.4,
-              p: 2,
-            }}
-          >
-            {/* Navigation Links */}
-            {navItems.map((item) => (
-              <Typography
-                key={item.text}
-                variant="h5"
+        {/* Navigation Items */}
+        <Stack spacing={0.5} sx={{ px: 2 }}>
+          {navItems.map((item, index) => (
+            <Fade
+              key={item.text}
+              in={isOpen}
+              style={{ transitionDelay: `${index * 50}ms` }}
+            >
+              <Button
+                onClick={() => handleNavigation(item.path)}
                 sx={{
-                  fontWeight: "300",
-                  cursor: "pointer",
-                  textAlign: "center",
+                  justifyContent: "flex-start",
+                  py: 2,
+                  px: 3,
+                  borderRadius: 2,
+                  color: "text.primary",
+                  position: "relative",
+                  overflow: "hidden",
                   "&:hover": {
-                    color: theme.palette.primary.main, // Use theme primary color on hover
+                    bgcolor: "rgba(239, 49, 49, 0.04)",
+                    "&::after": {
+                      transform: "translateX(0)",
+                    },
+                  },
+                  "&::after": {
+                    content: '""',
+                    position: "absolute",
+                    left: 0,
+                    bottom: 0,
+                    height: "2px",
+                    width: "100%",
+                    bgcolor: "#EF3131",
+                    transform: "translateX(-100%)",
+                    transition: "transform 0.3s ease",
                   },
                 }}
-                onClick={() => {
-                  navigate(item.path); // Navigate to the specified path
-                  setIsClicked(false); // Close the side navbar
-                }}
               >
-                {item.text}
-              </Typography>
-            ))}
-          </Stack>
-        </Box>
-      )}
+                <Stack
+                  direction="row"
+                  alignItems="center"
+                  justifyContent="space-between"
+                  sx={{ width: "100%" }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 400,
+                      fontSize: "1rem",
+                    }}
+                  >
+                    {item.text}
+                  </Typography>
+                  <ChevronRight
+                    sx={{
+                      color: "#EF3131",
+                      opacity: 0.5,
+                      transition: "opacity 0.2s ease",
+                    }}
+                  />
+                </Stack>
+              </Button>
+            </Fade>
+          ))}
+        </Stack>
 
-      {/* Overlay (Visible only on mobile) */}
-      {isMobile && isClicked && (
-        <Box
-          sx={{
-            width: "100vw",
-            height: "100vh",
-            position: "fixed",
-            top: 0,
-            left: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            zIndex: 998,
-          }}
-          onClick={() => setIsClicked(false)}
-        />
-      )}
+        {/* Bottom Content */}
+        <Box sx={{ mt: "auto", p: 3 }}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: "text.secondary",
+              textAlign: "center",
+              mb: 2,
+            }}
+          >
+            Connect with El Sewedy
+          </Typography>
+          <Button
+            fullWidth
+            variant="outlined"
+            sx={{
+              borderColor: "#EF3131",
+              color: "#EF3131",
+              "&:hover": {
+                borderColor: "#D32F2F",
+                bgcolor: "rgba(239, 49, 49, 0.04)",
+              },
+            }}
+          >
+            Contact Us
+          </Button>
+        </Box>
+      </Drawer>
     </>
   );
 };

@@ -1,421 +1,375 @@
-import React, { useState } from "react";
-import sewedy from "../assets/sewedy.png";
+import React from "react";
 import {
   Box,
   Button,
+  Container,
   Grid,
-  MenuItem,
-  Select,
   Stack,
   TextField,
   Typography,
-  FormControl,
-  InputLabel,
   useTheme,
   useMediaQuery,
+  Paper,
+  Fade,
+  Zoom,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import Footer from "../Components/Footer";
+import { motion } from "framer-motion";
+import { useForm } from "react-hook-form";
 import { useSnackbar } from "./SnackbarProvider";
+import Footer from "../Components/Footer";
+import sewedy from "../assets/sewedy.png";
+import {
+  Send,
+  Business,
+  Description,
+  Email,
+  Phone,
+  Person,
+} from "@mui/icons-material";
+import { useFormSubmitMutation } from "../Slices/AuthSlice/AuthInjection";
+import { useNavigate } from "react-router-dom";
+
+const MotionBox = motion(Box);
 
 const ProjectForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { showSnackbar } = useSnackbar();
-
-      const [selectedImage, setSelectedImage] = useState(null);
-
-      const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-          setValue("attachment", file);
-          setSelectedImage(URL.createObjectURL(file)); // Generate a preview
-        }
-      };
-
-
+  const [formSub] =  useFormSubmitMutation();
   const {
     register,
     handleSubmit,
-    control,
-    setValue,
     formState: { errors },
   } = useForm();
+  const navigate = useNavigate();
+  const onSubmit = async (data) => {
 
-  const skillsList = [
-    "Software Development",
-    "Web Development",
-    "Mobile App Development",
-    "Artificial Intelligence",
-    "UI/UX Design",
-    "Data Science",
-  ];
+    try
+    {
 
-  const onSubmit = (data) => {
-    showSnackbar("fesfesfes","success");
+    const res = await formSub({data}).unwrap();
+    if (res.bool == true)
+    {
+      showSnackbar("Form submitted successfully", "success");
+      navigate(-1);
+    }else
+    {
+     showSnackbar("Failed", "error");
+    }
+  }catch(c){
+     showSnackbar("Internal Error", "error");
+  }
+  
+};
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
   };
 
   return (
-    <Box>
-      {/* Banner Section */}
+    <Box sx={{ overflow: "hidden" }}>
+      {/* Hero Section with Parallax Effect */}
       <Box
         sx={{
           position: "relative",
-          height: { xs: 400, md: 700 },
+          height: { xs: "70vh", md: "80vh" },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          textAlign: "center",
           overflow: "hidden",
-          mb: 10,
+          mb: { xs: 8, md: 12 },
         }}
       >
-        <Box
+        <MotionBox
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 1.5 }}
           sx={{
             position: "absolute",
             top: 0,
             left: 0,
-            width: "100%",
-            height: "100%",
+            right: 0,
+            bottom: 0,
             backgroundImage: `url(${sewedy})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            filter: "blur(1px)",
-            maskImage: "linear-gradient(to top, transparent, black)",
-            WebkitMaskImage: "linear-gradient(to top, transparent, black)",
-            zIndex: -1,
+            filter: "brightness(0.7)",
+            "&::after": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background:
+                "linear-gradient(to bottom, transparent 60%, rgba(0,0,0,0.7))",
+            },
           }}
         />
-        <Box sx={{ position: "relative", zIndex: 1, mt: 30 }}>
-          <Typography
-            variant={isMobile ? "h6" : "h1"}
-            fontWeight="500"
-            fontSize={isMobile ? "30px" : "60px"}
-            color="#1a1a1a"
-          >
-            <span
-              style={{
-                display: "block",
-                fontSize:"50px",
+        <Container
+          maxWidth="lg"
+          sx={{ position: "relative", zIndex: 2, textAlign: "center" }}
+        >
+          <Fade in timeout={1000}>
+            <Typography
+              variant={isMobile ? "h2" : "h1"}
+              sx={{
+                color: "white",
+                fontWeight: 700,
+                fontSize: { xs: "2.5rem", md: "4rem" },
+                textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
+                "& span": {
+                  color: "#FF0000",
+                  display: "block",
+                  fontSize: { xs: "2rem", md: "3rem" },
+                  mb: 2,
+                },
               }}
             >
-              Work with
-            </span>
-            <span
-              style={{
-                color: "#DA1B1B",
-              }}
-            >
-              El Sewedy IATS{" "}
-            </span>
-            students
-          </Typography>
-        </Box>
+              <span>Work with</span>
+              El Sewedy IATS Students
+            </Typography>
+          </Fade>
+        </Container>
       </Box>
 
-      <Box
-        sx={{
-          maxWidth: "100vw",
-          margin: "auto",
-          padding: isMobile ? "20px" : "40px",
-        }}
-      >
-        {/* Stack for first two elements (left-aligned) */}
-        <Stack
-          sx={{
-            alignItems: "center",
-            justifyContent: "center",
-            width: "100%",
-            gap: isMobile ? "10px" : "15px", // Gap for spacing
-          }}
+      {/* Introduction Section */}
+      <Container maxWidth="lg" sx={{ mb: { xs: 8, md: 12 } }}>
+        <MotionBox
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeInUp}
+          transition={{ duration: 0.6 }}
+          sx={{ textAlign: "center" }}
         >
-          {/* Red Heading */}
           <Typography
+            variant="h3"
             sx={{
-              color: "#EF3131",
-              fontSize: isMobile ? "20px" : "30px",
-              fontWeight: "bold",
-              textAlign: "center",
+              color: "#FF0000",
+              fontWeight: 700,
+              fontSize: { xs: "2rem", md: "2.5rem" },
+              mb: 3,
             }}
           >
             Looking for help with your project?
           </Typography>
-
-          {/* Main Text with Links */}
           <Typography
+            variant="h6"
             sx={{
-              fontSize: isMobile ? "14px" : "25px",
-              color: "#000",
-              lineHeight: "1.6",
-              width: { lg: "50%", md: "50%" },
-              textAlign: "center",
+              maxWidth: "800px",
+              mx: "auto",
+              mb: 6,
+              color: "#1a1a1a",
+              lineHeight: 1.8,
+              fontSize: { xs: "1.1rem", md: "1.25rem" },
             }}
           >
-            <b>El Sewedy School</b> offers you the opportunity to collaborate
-            with our students on various projects. Whether you need{" "}
+            <strong>El Sewedy School</strong> offers you the opportunity to
+            collaborate with our students on various projects. Whether you need{" "}
             <Box
               component="span"
               sx={{
-                fontWeight: "bold",
-                textDecoration: "underline",
-                cursor: "pointer",
+                color: "#FF0000",
+                fontWeight: 500,
               }}
             >
               software development, web development, mobile app development,
               artificial intelligence, UI/UX design, or any other IT-related
-              field.
+              field
             </Box>
+            , we're here to help.
           </Typography>
-        </Stack>
-
-        {/* Bold Ending Text (centered) */}
-        <Typography
-          sx={{
-            fontSize: isMobile ? "14px" : "25px",
-            fontWeight: "bold",
-            textAlign: "center",
-            marginTop: isMobile ? "20px" : "30px", // Space between sections,
-            mb: 2,
-            mt: 10,
-          }}
-        >
-          Fill out the form below, and we will help you find the right student
-          for your project!
-        </Typography>
-      </Box>
+        </MotionBox>
+      </Container>
 
       {/* Form Section */}
-      <Box
-        sx={{
-          maxWidth: { xs: "90%", sm: "600px" }, // Responsive width
-          margin: "auto",
-          padding: { xs: "20px", sm: "30px" },
-          borderRadius: "10px",
-          background: "#fff",
-          boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)",
-          mb: 10,
-        }}
-      >
-        <Typography
+      <Container maxWidth="md" sx={{ mb: { xs: 8, md: 12 } }}>
+        <Paper
+          component={motion.div}
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          elevation={3}
           sx={{
-            fontSize: isMobile ? "14px" : "24px",
-            color: "#000",
-            lineHeight: "1.6",
-            textAlign: "center",
-            p: 3,
-            fontWeight: "bold",
+            p: { xs: 3, md: 6 },
+            borderRadius: 4,
+            background: "linear-gradient(145deg, #ffffff 0%, #f5f5f5 100%)",
           }}
         >
-          Requirments Fields
-        </Typography>
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{
+              mb: 4,
+              color: "#1a1a1a",
+              fontWeight: 700,
+              fontSize: { xs: "1.75rem", md: "2.25rem" },
+            }}
+          >
+            Project Request Form
+          </Typography>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="First Name *"
-                fullWidth
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-                error={!!errors.firstName}
-                helperText={errors.firstName?.message}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="Last Name *"
-                fullWidth
-                {...register("lastName", { required: "Last name is required" })}
-                error={!!errors.lastName}
-                helperText={errors.lastName?.message}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Company Name"
-                fullWidth
-                {...register("companyName")}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Email Address *"
-                fullWidth
-                {...register("email", {
-                  required: "Email is required",
-                  pattern: {
-                    value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                    message: "Invalid email address",
-                  },
-                })}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Mobile Number *"
-                fullWidth
-                {...register("mobile", {
-                  required: "Mobile number is required",
-                  pattern: {
-                    value: /^[0-9]{10,15}$/,
-                    message: "Invalid mobile number",
-                  },
-                })}
-                error={!!errors.mobile}
-                helperText={errors.mobile?.message}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Field of Work *"
-                fullWidth
-                {...register("fieldOfWork", {
-                  required: "Field of work is required",
-                })}
-                error={!!errors.fieldOfWork}
-                helperText={errors.fieldOfWork?.message}
-              />
-            </Grid>
-
-            <Grid item xs={12}>
-              <FormControl fullWidth error={!!errors.skills}>
-                <InputLabel>Required Skills *</InputLabel>
-                <Controller
-                  name="skills"
-                  control={control}
-                  rules={{ required: "Please select at least one skill" }}
-                  render={({ field }) => (
-                    <Select
-                      {...field}
-                      multiple
-                      value={field.value || []}
-                      onChange={(event) => field.onChange(event.target.value)}
-                    >
-                      {skillsList.map((skill, index) => (
-                        <MenuItem key={index} value={skill}>
-                          {skill}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  )}
-                />
-                <Typography color="error" variant="caption">
-                  {errors.skills?.message}
-                </Typography>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
-              <TextField
-                label="Project Description *"
-                fullWidth
-                multiline
-                rows={3}
-                {...register("description", {
-                  required: "Project description is required",
-                })}
-                error={!!errors.description}
-                helperText={errors.description?.message}
-              />
-            </Grid>
-
-            {/* File Upload */}
-            <Grid item xs={12}>
-              <input
-                type="file"
-                id="file-upload"
-                style={{ display: "none" }}
-                accept="image/*"
-                onChange={handleFileChange}
-              />
-              <label htmlFor="file-upload">
-                <Button
-                  variant="outlined"
-                  component="span"
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={3}>
+              <Grid item xs={12}>
+                <TextField
                   fullWidth
-                  sx={{ textTransform: "none" }}
-                >
-                  Attach a File 📎
-                </Button>
-              </label>
-              {/* Display Image Preview */}
-              {selectedImage && (
-                <Box
+                  label="Company Name"
+                  InputProps={{
+                    startAdornment: (
+                      <Business sx={{ mr: 1, color: "text.secondary" }} />
+                    ),
+                  }}
+                  {...register("company_name")}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="First Name *"
+                  InputProps={{
+                    startAdornment: (
+                      <Person sx={{ mr: 1, color: "text.secondary" }} />
+                    ),
+                  }}
+                  {...register("f_name", {
+                    required: "First name is required",
+                  })}
+                  error={!!errors.f_name}
+                  helperText={errors.f_name?.message}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Last Name *"
+                  InputProps={{
+                    startAdornment: (
+                      <Person sx={{ mr: 1, color: "text.secondary" }} />
+                    ),
+                  }}
+                  {...register("l_name", { required: "Last name is required" })}
+                  error={!!errors.l_name}
+                  helperText={errors.l_name?.message}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Email Address *"
+                  InputProps={{
+                    startAdornment: (
+                      <Email sx={{ mr: 1, color: "text.secondary" }} />
+                    ),
+                  }}
+                  {...register("email", {
+                    required: "Email is required",
+                    pattern: {
+                      value:
+                        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                      message: "Invalid email address",
+                    },
+                  })}
+                  error={!!errors.email}
+                  helperText={errors.email?.message}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Phone Number *"
+                  InputProps={{
+                    startAdornment: (
+                      <Phone sx={{ mr: 1, color: "text.secondary" }} />
+                    ),
+                  }}
+                  {...register("phone", {
+                    required: "Phone number is required",
+                  })}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Project Information *"
+                  multiline
+                  rows={4}
+                  InputProps={{
+                    startAdornment: (
+                      <Description
+                        sx={{ mr: 1, mt: 1, color: "text.secondary" }}
+                      />
+                    ),
+                  }}
+                  {...register("project_information", {
+                    required: "Project information is required",
+                  })}
+                  error={!!errors.project_information}
+                  helperText={errors.project_information?.message}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Additional Message"
+                  multiline
+                  rows={3}
+                  {...register("message")}
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography
+                  variant="body2"
                   sx={{
-                    mt: 2,
-                    display: "flex",
-                    justifyContent: "left",
+                    textAlign: "center",
+                    mb: 3,
+                    color: "text.secondary",
+                    fontSize: "0.9rem",
                   }}
                 >
-                  <img
-                    src={selectedImage}
-                    alt="Preview"
-                    style={{
-                      maxWidth: "300px",
-                      height: "100px",
-                      objectFit: "contain",
-                      borderRadius: "10px",
-                    }}
-                  />
-                </Box>
-              )}
-            </Grid>
+                  * Once you submit your request, our program manager will
+                  review it and contact you shortly.
+                </Typography>
 
-            <Grid item xs={12}>
-              <TextField
-                label="Additional Message"
-                fullWidth
-                multiline
-                rows={3}
-                {...register("message")}
-              />
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  size="large"
+                  endIcon={<Send />}
+                  sx={{
+                    bgcolor: "#FF0000",
+                    py: 1.5,
+                    fontSize: "1.1rem",
+                    transition: "all 0.3s ease",
+                    "&:hover": {
+                      bgcolor: "#CC0000",
+                      transform: "translateY(-2px)",
+                    },
+                  }}
+                >
+                  Submit Request
+                </Button>
+              </Grid>
             </Grid>
+          </form>
+        </Paper>
+      </Container>
 
-            <Grid item xs={12}>
-              <Typography
-                variant="body2"
-                sx={{ textAlign: "center", marginBottom: "10px" }}
-              >
-                *Once you submit your request, our program manager will review
-                it and contact you shortly.
-              </Typography>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{
-                  background: "#D32F2F",
-                  color: "#fff",
-                  "&:hover": { background: "#B71C1C" },
-                  fontSize:"15px"
-                }}
-              >
-                Submit Request
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
-      <div
-        style={{
-          display: "flex",
-        }}
-      >
-        <Footer />
-      </div>
+      <Footer />
     </Box>
   );
 };
 
-const Work = () => {
-  return <ProjectForm />;
-};
-
-export default Work;
+export default ProjectForm;

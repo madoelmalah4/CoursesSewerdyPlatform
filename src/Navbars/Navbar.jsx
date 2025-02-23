@@ -1,190 +1,153 @@
 import {
+  AppBar,
   Box,
+  Button,
+  Container,
   Stack,
-  Tooltip,
   Typography,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import React from "react";
-import { Reveal } from "../Components/Reveal";
 import { useNavigate } from "react-router-dom";
+import { Reveal } from "../Components/Reveal";
 import SewedyLogo from "../assets/sewedylogo.png";
-import CostumButton from "../Components/CostumButton";
 
-const Navbar = () => {
+const NavLink = ({ text, to, duration }) => {
   const navigate = useNavigate();
-  const theme = useTheme();
-
-  // Check if the screen size is small (mobile/tablet)
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Stack
-      sx={{
-        width: "100vw",
-        height: "90px",
-        flexDirection: isSmallScreen ? "column" : "row",
-        justifyContent: isSmallScreen ? "center" : "space-between",
-        alignItems: "center",
-        backgroundColor: "trnasparent",
-        boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-        zIndex: 1000,
-        position: "fixed",
-        padding: isSmallScreen ? "10px 20px" : "0 40px",
-      }}
-    >
-      {/* Logo */}
-      <Box
-        component={"img"}
-        src={SewedyLogo}
+    <Reveal duration={duration}>
+      <Typography
+        onClick={() => navigate(to)}
         sx={{
           cursor: "pointer",
-          width: isSmallScreen ? "150px" : "200px",
-          mb: isSmallScreen ? 1 : 3,
-        }}
-        onClick={() => navigate("/")}
-      />
-
-      {/* Navigation Links */}
-      <Stack
-        sx={{
-          flexDirection: isSmallScreen ? "column" : "row",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: isSmallScreen ? "15px" : "30px",
-          mt: isSmallScreen ? 2 : 0,
-          mr: 6,
-        }}
-      >
-        <Reveal duration={0.8}>
-          <Typography
-            sx={{
-              cursor: "pointer",
-              fontWeight: "300",
-              fontSize: isSmallScreen ? "16px" : "20px",
-              position: "relative",
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                width: "0%",
-                height: "2px",
-                bottom: "-5px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#EF3131",
-                transition: "width 0.3s ease-in-out",
-              },
-              "&:hover::after": {
-                width: "100%",
-              },
-            }}
-          >
-            Apply Now!
-          </Typography>
-        </Reveal>
-        <Reveal duration={1}>
-          <Typography
-            sx={{
-              cursor: "pointer",
-              fontWeight: "300",
-              fontSize: isSmallScreen ? "16px" : "20px",
-              position: "relative",
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                width: "0%",
-                height: "2px",
-                bottom: "-5px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#EF3131",
-                transition: "width 0.3s ease-in-out",
-              },
-              "&:hover::after": {
-                width: "100%",
-              },
-            }}
-            onClick={() => navigate("/courses")}
-          >
-            Our Courses
-          </Typography>
-        </Reveal>
-        <Reveal duration={1.2}>
-          <Typography
-            sx={{
-              cursor: "pointer",
-              fontWeight: "300",
-              fontSize: isSmallScreen ? "16px" : "20px",
-              position: "relative",
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                width: "0%",
-                height: "2px",
-                bottom: "-5px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#EF3131",
-                transition: "width 0.3s ease-in-out",
-              },
-              "&:hover::after": {
-                width: "100%",
-              },
-            }}
-            onClick={() => navigate("/about")}
-          >
-            About Us
-          </Typography>
-        </Reveal>
-
-        <Reveal duration={1.2}>
-          <Typography
-            sx={{
-              cursor: "pointer",
-              fontWeight: "300",
-              fontSize: isSmallScreen ? "16px" : "20px",
-              position: "relative",
-              "&::after": {
-                content: '""',
-                position: "absolute",
-                width: "0%",
-                height: "2px",
-                bottom: "-5px",
-                left: "50%",
-                transform: "translateX(-50%)",
-                backgroundColor: "#EF3131",
-                transition: "width 0.3s ease-in-out",
-              },
-              "&:hover::after": {
-                width: "100%",
-              },
-            }}
-            onClick={() => navigate("/Work")}
-          >
-            Work with us
-          </Typography>
-        </Reveal>
-
-      </Stack>
-
-      {/* Login Button */}
-      <Stack
-        sx={{
-          mt: isSmallScreen ? 2 : 0,
-          alignItems: "center",
-          mr: 10,
+          fontWeight: "300",
+          fontSize: { xs: "16px", md: "18px" },
+          color: "#1A1A1A",
+          position: "relative",
+          transition: "color 0.3s ease",
+          textWrap:"nowrap",
+          "&:hover": {
+            color: "#EF3131",
+          },
+          "&::after": {
+            content: '""',
+            position: "absolute",
+            width: "0%",
+            height: "2px",
+            bottom: "-5px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "#EF3131",
+            transition: "width 0.3s ease-in-out",
+          },
+          "&:hover::after": {
+            width: "100%",
+          },
         }}
       >
-        <CostumButton
-          width={isSmallScreen ? "100px" : "120px"}
-          height={isSmallScreen ? "40px" : "44px"}
-          Text={"Login"}
-          border={"10px"}
-          path={"/login"}
-        />
-      </Stack>
-    </Stack>
+        {text}
+      </Typography>
+    </Reveal>
+  );
+};
+
+const Navbar = () => {
+  const theme = useTheme();
+  const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const navLinks = [
+    { text: "Apply Now!", to: "/" },
+    { text: "Our Courses", to: "/courses" },
+    { text: "About Us", to: "/about" },
+    { text: "Work with us", to: "/Work" },
+  ];
+
+  return (
+    <AppBar
+      position="fixed"
+      elevation={0}
+      sx={{
+        bgcolor: "white",
+        borderBottom: "1px solid #EAEAEA",
+        height: "90px",
+      }}
+    >
+      <Container maxWidth="xl">
+        <Stack
+          direction="row"
+          sx={{
+            height: "90px",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          {/* Logo */}
+          <Box
+            component="img"
+            src={SewedyLogo}
+            alt="Sewedy Logo"
+            sx={{
+              height: "50px",
+              width: "auto",
+              cursor: "pointer",
+              transition: "transform 0.3s ease",
+              mb:2,
+              "&:hover": {
+                transform: "scale(1.02)",
+              },
+            }}
+            onClick={() => navigate("/")}
+          />
+
+          {/* Navigation Links - Center */}
+          {!isSmallScreen && (
+            <Stack
+              direction="row"
+              spacing={4}
+              sx={{
+                position: "absolute",
+                left: "50%",
+                transform: "translateX(-50%)",
+              }}
+            >
+              {navLinks.map((link, index) => (
+                <NavLink
+                  key={index}
+                  text={link.text}
+                  to={link.to}
+                  duration={(index + 1) * 0.2}
+                
+                />
+              ))}
+            </Stack>
+          )}
+
+          {/* Login Button */}
+          <Button
+            variant="contained"
+            onClick={() => navigate("/login")}
+            sx={{
+              bgcolor: "#EF3131",
+              color: "white",
+              px: 3,
+              py: 1,
+              borderRadius: "8px",
+              textTransform: "none",
+              fontSize: "16px",
+              fontWeight: "500",
+              "&:hover": {
+                bgcolor: "#D32F2F",
+              },
+              minWidth: "100px",
+            }}
+          >
+            Login
+          </Button>
+        </Stack>
+      </Container>
+    </AppBar>
   );
 };
 

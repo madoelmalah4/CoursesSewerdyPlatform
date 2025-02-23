@@ -1,211 +1,290 @@
+import React from "react";
 import {
+  Box,
+  Container,
+  Grid,
+  Link,
   Stack,
   Typography,
-  Link,
-  Box,
   useTheme,
   useMediaQuery,
+  Divider,
 } from "@mui/material";
-import React from "react";
+import { motion } from "framer-motion";
+import {
+  Facebook,
+  Instagram,
+  LinkedIn,
+  Email,
+  Phone,
+  LocationOn,
+} from "@mui/icons-material";
+
+const MotionBox = motion(Box);
 
 const Footer = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md")); // Detect mobile devices
-  const isHighZoom = useMediaQuery("(max-width: 900px)"); // Approximation for 175% zoom
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const socialLinks = [
+    {
+      name: "Facebook",
+      url: "https://www.facebook.com/profile.php?id=100083837165938",
+      icon: <Facebook />,
+    },
+    {
+      name: "Instagram",
+      url: "",
+      icon: <Instagram />,
+    },
+    {
+      name: "LinkedIn",
+      url: "https://www.linkedin.com/company/el-sewedy-iats/posts/?feedView=all",
+      icon: <LinkedIn />,
+    },
+  ];
 
   return (
-    <Stack
+    <Box
+      component="footer"
       sx={{
-        width: "100vw",
-        minHeight: { lg: "330px", sm: "auto", xs: "auto", md: "auto" },
-        backgroundColor: "#1C1D1F",
+        bgcolor: "#1C1D1F",
         color: "white",
-        padding: "60px 20px",
-        gap: isHighZoom ? "20px" : "40px", // Smaller gap at high zoom
-        alignItems: "center",
-        fontFamily: "Rubik, sans-serif",
+        pt: { xs: 8, md: 10 },
+        pb: { xs: 6, md: 8 },
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      {/* Title */}
-      <Typography
-        variant="h5"
-        fontWeight="bold"
-        sx={{
-          textAlign: "center",
-          maxWidth: "1000px",
-          fontSize: isHighZoom ? "11px" : { xs: "13px", md: "32px" }, // Adjusted text size
-          mb: 2,
-        }}
-      >
-        <span style={{ color: "#C3103A" }}>El Sewedy </span> International
-        School for Applied Technology and Software is the best choice for you.
-      </Typography>
+        <Box sx={{ maxWidth: "100%", mx: "auto", px: { xs: 2, md: 6 } }}>
+        {/* Main Content */}
+        <Grid container spacing={6}>
+          {/* Title Section */}
+          <Grid item xs={12}>
+            <MotionBox
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              transition={{ duration: 0.6 }}
+              sx={{ textAlign: "center", mb: { xs: 4, md: 6 } }}
+            >
+              <Typography
+                variant="h3"
+                component="div"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: { xs: "1.75rem", sm: "2rem", md: "2.5rem" },
+                  lineHeight: 1.4,
+                  maxWidth: "800px",
+                  mx: "auto",
+                  "& span": {
+                    color: "#FF0000",
+                    fontWeight: 800,
+                  },
+                }}
+              >
+                <span>El Sewedy</span> International School for Applied
+                Technology and Software
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{
+                  mt: 2,
+                  color: "grey.400",
+                  fontSize: { xs: "1rem", md: "1.25rem" },
+                }}
+              >
+                The best choice for your future in technology
+              </Typography>
+            </MotionBox>
+          </Grid>
 
-      {/* Content Sections */}
-      <Stack
-        flexDirection={isMobile ? "column" : "row"}
-        sx={{
-          alignItems: "center",
-          justifyContent: "center",
-          maxWidth: "1200px",
-          gap: isHighZoom ? 5 : isMobile ? 10 : 30, // Adjusted gap
-        }}
-      >
-        {/* Social Media Section (Fixed Alignment) */}
-        <Stack
+          {/* Contact Sections */}
+          <Grid item xs={12}>
+            <Grid
+              container
+              spacing={4}
+              justifyContent="center"
+              sx={{
+                textAlign: "center",
+                "& .MuiGrid-item": {
+                  borderRight: {
+                    md: "1px solid rgba(255,255,255,0.1)",
+                  },
+                  "&:last-child": {
+                    borderRight: "none",
+                  },
+                },
+              }}
+            >
+              {/* Social Media Section */}
+              <Grid item xs={12} md={4}>
+                <Stack spacing={3} alignItems="center">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: { xs: "1.25rem", md: "1.5rem" },
+                      color: "#FF0000",
+                    }}
+                  >
+                    Connect With Us
+                  </Typography>
+                  <Stack spacing={2} direction="row" justifyContent="center">
+                    {socialLinks.map((social) => (
+                      <Link
+                        key={social.name}
+                        href={social.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        sx={{
+                          color: "white",
+                          transition: "all 0.3s ease",
+                          "&:hover": {
+                            color: "#FF0000",
+                            transform: "translateY(-3px)",
+                          },
+                        }}
+                      >
+                        <Box sx={{ fontSize: "2rem" }}>{social.icon}</Box>
+                      </Link>
+                    ))}
+                  </Stack>
+                </Stack>
+              </Grid>
+
+              {/* Location Section */}
+              <Grid item xs={12} md={4}>
+                <Stack spacing={3} alignItems="center">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: { xs: "1.25rem", md: "1.5rem" },
+                      color: "#FF0000",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <LocationOn /> Our Location
+                  </Typography>
+                  <Stack spacing={1}>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                        color: "grey.300",
+                      }}
+                    >
+                      6th of October, Giza, Egypt
+                    </Typography>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                        color: "grey.300",
+                      }}
+                    >
+                      Egypt (A.R.E)
+                    </Typography>
+                  </Stack>
+                </Stack>
+              </Grid>
+
+              {/* Contact Section */}
+              <Grid item xs={12} md={4}>
+                <Stack spacing={3} alignItems="center">
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      fontSize: { xs: "1.25rem", md: "1.5rem" },
+                      color: "#FF0000",
+                    }}
+                  >
+                    Contact Us
+                  </Typography>
+                  <Stack spacing={2}>
+                    <Link
+                      href="mailto:elsewedy.iats@gmail.com"
+                      sx={{
+                        color: "grey.300",
+                        textDecoration: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        transition: "all 0.3s ease",
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                        "&:hover": {
+                          color: "#FF0000",
+                        },
+                      }}
+                    >
+                      <Email fontSize="small" />
+                      elsewedy.iats@gmail.com
+                    </Link>
+                    <Link
+                      href="tel:+201289007669"
+                      sx={{
+                        color: "grey.300",
+                        textDecoration: "none",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        transition: "all 0.3s ease",
+                        fontSize: { xs: "1rem", md: "1.1rem" },
+                        "&:hover": {
+                          color: "#FF0000",
+                        },
+                      }}
+                    >
+                      <Phone fontSize="small" />
+                      +20 1289007669
+                    </Link>
+                  </Stack>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* Copyright Section */}
+        <Divider sx={{ mt: 8, mb: 4, bgcolor: "rgba(255,255,255,0.1)" }} />
+        <Box
           sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: isHighZoom ? 1 : 2, // Reduced gap
+            textAlign: "center",
+            color: "grey.500",
+            fontSize: { xs: "0.875rem", md: "1rem" },
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              fontSize: isHighZoom ? "16px" : { xs: "20px", md: "24px" },
-            }}
-          >
-            Social Media
+          <Typography variant="body2">
+            © {new Date().getFullYear()} El Sewedy International School. All
+            rights reserved.
           </Typography>
-          <Link
-            href="https://www.facebook.com/profile.php?id=100083837165938"
-            color="inherit"
-            underline="hover"
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-              display: "block",
-              marginBottom: "5px",
-            }}
-          >
-            Facebook
-          </Link>
-          <Link
-            href=""
-            color="inherit"
-            underline="hover"
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-              display: "block",
-              marginBottom: "5px",
-            }}
-          >
-            Instagram
-          </Link>
-          <Link
-            href="https://www.linkedin.com/company/el-sewedy-iats/posts/?feedView=all"
-            color="inherit"
-            underline="hover"
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-              display: "block",
-            }}
-          >
-            LinkedIn
-          </Link>
-        </Stack>
+        </Box>
+      </Box>
 
-        {/* Location Section */}
-        <Stack
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: isHighZoom ? 1 : 2,
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              fontSize: isHighZoom ? "16px" : { xs: "20px", md: "24px" },
-            }}
-          >
-            Location
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-            }}
-          >
-            6th of October, Giza, Egypt.
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-            }}
-          >
-            Egypt (A.R.E).
-          </Typography>
-        </Stack>
-
-        {/* Contact Section */}
-        <Stack
-          sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            gap: isHighZoom ? 1 : 2,
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              fontSize: isHighZoom ? "16px" : { xs: "20px", md: "24px" },
-            }}
-          >
-            Contact
-          </Typography>
-          <Link
-            href="mailto:elsewedy.iats@gmail.com"
-            color="inherit"
-            underline="hover"
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-            }}
-          >
-            elsewedy.iats@gmail.com
-          </Link>
-          <Link
-            href="tel:+201289007669"
-            color="inherit"
-            underline="hover"
-            sx={{
-              fontSize: isHighZoom ? "12px" : { xs: "16px", md: "18px" },
-              textAlign: "center",
-            }}
-          >
-            +20 1289007669
-          </Link>
-        </Stack>
-      </Stack>
-
-      {/* Footer Copyright */}
+      {/* Background Gradient Effect */}
       <Box
         sx={{
-          borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-          paddingTop: "20px",
-          textAlign: "center",
-          width: "100%",
-          maxWidth: "1200px",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: "100%",
+          background:
+            "linear-gradient(180deg, rgba(255,0,0,0.05) 0%, rgba(0,0,0,0) 100%)",
+          pointerEvents: "none",
         }}
-      >
-        <Typography
-          variant="body2"
-          sx={{
-            fontSize: isHighZoom ? "10px" : { xs: "14px", md: "16px" },
-          }}
-        >
-          © {new Date().getFullYear()} El Sewedy International School. All
-          rights reserved.
-        </Typography>
-      </Box>
-    </Stack>
+      />
+    </Box>
   );
 };
 
